@@ -24,33 +24,60 @@ $("#add-train").on("click", function (event) {
     var destination = $('#destination-input').val();
     var time = $('#time-input').val();
     var frequency = $('#frequency-input').val();
+   
 
     // Initial Values
-    database.ref().set({
+    database.ref().push({
         name: name,
         destination: destination,
         time: time,
-        frequency: frequency
+        frequency: frequency,
+        minAway: minAway
     })
     //add table row
     
-
     
 
     });
 
 
-    database.ref().on("value", function (snapshot) {
-        console.log(snapshot.val().name);
-        console.log(snapshot.val().destination);
-        console.log(snapshot.val().frequency);
-        console.log(snapshot.val().time);
+    database.ref().on("child_added", function (snap) {
 
-        $("#newName").text(snapshot.val().name);
-        $("#newDest").text(snapshot.val().destination);
-        $("#newFreq").text(snapshot.val().frequency);
-        $("#newTime").text(snapshot.val().time);
+        console.log(snap.val())
+    
+        var val = snap.val();
+        var current = moment();
+        var name = val.name;
+        var startTime = moment(val.time, "HH:mm");
+        var destination = val.destination;
+        var frequency = val.frequency;
+        var timeDifference = current.diff(startTime);
+        var nArr = current.add(timeDifference).minutes();
+       
+        
+        // moment(startTime, "hh:mm A").diff(current, "hh:mm A");
+        // console.log("Calc " + calc);
+        console.log("Diff " + timeDifference);
+        console.log("Current time " + current);
+        console.log("Next Arrival " + nArr)
+        
+        
+        
+        
+       
 
+        
+        
+        var $row = $('<tr>');
+        $row.append('<td>' + name + '</td>');
+        $row.append('<td>' + destination + '</td>');
+        $row.append('<td>' + frequency + '</td>');
+        $row.append('<td>' + timeDifference + '</td>');
+        $row.append('<td>' + nArr + '</td>');
+       
+        $('tbody').append($row);
+
+    
     });
 
 //   If any errors are experienced, log them to console.
