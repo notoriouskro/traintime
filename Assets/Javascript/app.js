@@ -46,24 +46,35 @@ $("#add-train").on("click", function (event) {
         console.log(snap.val())
     
         var val = snap.val();
-        var current = moment();
+        var current = (moment().format("m"));
         var name = val.name;
-        var startTime = moment(val.time, "HH:mm");
+
+        // I really struggled with Moment JS. This is where I attempted to conver the current time and start time into minutes. The goal was to add them together to get an updated arrival time.
+        var startTime = val.time;
+        var startMin = (moment.duration(val.time).asMinutes());
         var destination = val.destination;
         var frequency = val.frequency;
-        var timeDifference = current.diff(startTime);
-        var nArr = current.add(timeDifference).minutes();
+        var timeDifference = (moment(current).diff(startMin));
+        var diffMin = (moment.duration(timeDifference).asMinutes());
+        // var interval = "15";
+        // var nArr = startMin.plus(curMin).format("h:mm A");
        
         
         // moment(startTime, "hh:mm A").diff(current, "hh:mm A");
         // console.log("Calc " + calc);
-        console.log("Diff " + timeDifference);
+        
         console.log("Current time " + current);
-        console.log("Next Arrival " + nArr)
+        // console.log("Current time min " + curMin);
+        console.log("Start time min " + startMin);
+        console.log("Start time " + startTime);
+        console.log("Diff " + timeDifference);
+        console.log("diff as min " + diffMin );
+        
+        // console.log("Next Arrival " + nArr)
+        console.log("frequency " + frequency);
         
         
-        
-        
+        // Assuming the interval time worked I would be able to get an updated minutes away here but between my Moment JS and console logs, it never worked the way it was supposed to.
        
 
         
@@ -72,8 +83,8 @@ $("#add-train").on("click", function (event) {
         $row.append('<td>' + name + '</td>');
         $row.append('<td>' + destination + '</td>');
         $row.append('<td>' + frequency + '</td>');
-        $row.append('<td>' + timeDifference + '</td>');
-        $row.append('<td>' + nArr + '</td>');
+        // $row.append('<td>' + timeDifference + '</td>');
+        // $row.append('<td>' + nArr + '</td>');
        
         $('tbody').append($row);
 
